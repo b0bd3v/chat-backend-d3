@@ -17,6 +17,14 @@ class ConversationsController < ApplicationController
         end
     end
 
+    def destroy
+        conversation = Conversation.find(conversation_params[:id])
+        if conversation.destroy
+            ActionCable.server.broadcast 'conversations_channel', []
+            head :ok
+        end        
+    end
+
     private
   
     def conversation_params
