@@ -5,22 +5,27 @@ class ConversationsController < ApplicationController
         render json: conversations
     end
 
-
     def create
         conversation = Conversation.new(conversation_params)
         if conversation.save
+            
             serialized_data = ActiveModelSerializers::Adapter::Json.new(
                 ConversationSerializer.new(conversation)
             ).serializable_hash
-            ActionCable.server.broadcast 'conversations_channel', serialized_data
+
+            ActionCable.server.broadcast 'conversations_channel', { action: 'post', data: serialized_data }  
+            
             head :ok
-        end
+        end        
     end
 
     def destroy
-        conversation = Conversation.find(conversation_params[:id])
+        conversation = Conversation.find(params[:id])
         if conversation.destroy
-            ActionCable.server.broadcast 'conversations_channel', []
+            serialized_data = ActiveModelSerializers::Adapter::Json.new(
+                ConversationSerializer.new(conversation)
+            ).serializable_hash
+            ActionCable.server.broadcast 'conversations_channel', { action: 'delete', data: serialized_data }
             head :ok
         end        
     end
@@ -28,7 +33,7 @@ class ConversationsController < ApplicationController
     private
   
     def conversation_params
-        params.require(:conversation).permit(:title)
+        params.require(:conversation).permit(:title, :id)
     end
 
 end
