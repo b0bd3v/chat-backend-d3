@@ -8,32 +8,38 @@ class ConversationsController < ApplicationController
     def create
         conversation = Conversation.new(conversation_params)
         if conversation.save
-            
-            serialized_data = ActiveModelSerializers::Adapter::Json.new(
-                ConversationSerializer.new(conversation)
-            ).serializable_hash
-
-            ActionCable.server.broadcast 'conversations_channel', { action: 'post', data: serialized_data }  
-            
+            ActionCable.server.broadcast 'conversations_channel', {
+                action: 'post',
+                conversation: conversation
+            }
             head :ok
         end        
     end
 
     def destroy
-        conversation = Conversation.find(params[:id])
-        if conversation.destroy
-            serialized_data = ActiveModelSerializers::Adapter::Json.new(
-                ConversationSerializer.new(conversation)
-            ).serializable_hash
-            ActionCable.server.broadcast 'conversations_channel', { action: 'delete', data: serialized_data }
-            head :ok
-        end        
+        
+        conversation = Conversation.find_by_id(params[:id])
+        
+        if conversation
+            conversation.destroy
+        else
+            conversation = {
+                id: params[:id]
+            }            
+        end
+        
+        ActionCable.server.broadcast 'conversations_channel', {
+            action: 'delete',
+            conversation: conversation
+        }            
+
+        head :ok
     end
 
     private
   
     def conversation_params
-        params.require(:conversation).permit(:title, :id)
+        params.require(:conversation).permit(:title)
     end
 
 end
