@@ -8,10 +8,7 @@ class ConversationsController < ApplicationController
     def create
         conversation = Conversation.new(conversation_params)
         if conversation.save
-            ActionCable.server.broadcast 'conversations_channel', {
-                action: 'post',
-                conversation: conversation
-            }
+            ActionCable.server.broadcast 'conversations_channel', action: 'post', conversation: conversation
             head :ok
         end        
     end
@@ -27,13 +24,10 @@ class ConversationsController < ApplicationController
                 id: params[:id]
             }            
         end
-        
-        ActionCable.server.broadcast 'conversations_channel', {
-            action: 'delete',
-            conversation: conversation
-        }            
 
-        head :ok
+        ActionCable.server.broadcast 'conversations_channel', action: 'delete', conversation: conversation
+
+        head :ok       
     end
 
     private
