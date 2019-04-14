@@ -20,7 +20,7 @@ Executar as migrations
 `rails db:migrate`
 
 Executar
-`rails serve`
+`rails server`
 
 
 
