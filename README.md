@@ -1,24 +1,31 @@
-# README
+## Chat Action Cable
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Backend de app chat desenvolvido em Ruby on Rails com objetivo de avaliação de conhecimentos. 
 
-Things you may want to cover:
+O projeto frontend em react se encontra no link [Chat D3](https://github.com/robertomartins/chat-frontend-d3)*
 
-* Ruby version
 
-* System dependencies
+Exemplo **charoom with action cable** sugerido em: [Every time you build a to-do list app, a puppy 🐕 dies 😢](https://medium.freecodecamp.org/every-time-you-build-a-to-do-list-app-a-puppy-dies-505b54637a5d)  
 
-* Configuration
+### Demonstração
 
-* Database creation
+O projeto desta API está disponíbilizado em (http://chat-api-d3.herokuapp.com/). E sua interface em (http://chat-d3.herokuapp.com/).
 
-* Database initialization
+### Instalação
 
-* How to run the test suite
+Baixar os pacotes.
+`bundle install`
 
-* Services (job queues, cache servers, search engines, etc.)
+Executar as migrations
+`rails db:migrate`
 
-* Deployment instructions
+Executar
+`rails server`
 
-* ...
+
+
+
+
+
+
+
